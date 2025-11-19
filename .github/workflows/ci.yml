@@ -2,7 +2,7 @@ name: Terraform CI
 
 on:
   push:
-    branches: [ main1] # update to 'main' while testing
+    branches: [ main ] # update to 'main' while testing
   pull_request:
 
 permissions:
@@ -23,7 +23,7 @@ jobs:
           tflint --format json > input/tflint.json || true
 
       - name: AIOps SCA Agent
-        uses: ai-agents/aiops-sca@v1
+        uses: ai-agents/aiops-sca@v1.0.0
         with:
           enable: true
           scope: '["infra/**/*.tf"]'
