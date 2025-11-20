@@ -51,7 +51,7 @@ jobs:
         uses: aiops-agents/aiops-sca@dev
         with:
           llm_provider: azure_openai
-          llm_model: aiops-az-openai
+          llm_model: "gpt-4o-mini"
           scope: '["infra/**/*.tf"]'
           tf_root_dir: infra
           re_lint_after_apply: true
@@ -59,6 +59,6 @@ jobs:
           re_lint_tools: '["tflint","tfsec","checkov"]'
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
+          AZURE_OPENAI_ENDPOINT: "https://aiops-az-openai.openai.azure.com"
           AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
-          AZURE_OPENAI_API_VERSION: ${{ secrets.AZURE_OPENAI_API_VERSION }}
+          AZURE_OPENAI_API_VERSION: "2024-07-18"
