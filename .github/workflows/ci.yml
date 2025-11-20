@@ -36,14 +36,6 @@ jobs:
           # Native SARIF (optional, our action can also convert)
           tflint --recursive --format sarif > input/tflint.sarif || true
 
-      # (Optional) tfsec and checkov pre-run on the runner — if you want native SARIF/JSON before the action:
-      - name: Setup tfsec CLI
-        uses: aquasecurity/setup-tfsec@v1
-      - name: Run tfsec to JSON and SARIF
-        run: |
-          tfsec --format json --out input/tfsec.json || true
-          tfsec --format sarif --out input/tfsec.sarif || true
-
       - name: Setup Python for Checkov
         uses: actions/setup-python@v5
         with:
