@@ -21,10 +21,38 @@ jobs:
         with:
           persist-credentials: true  # so GITHUB_TOKEN works for push
 
-      - name: Run TFLint (example)
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v4
+        with:
+          tflint_version: v0.53.0  # matches the version baked into the action image
+
+      - name: Run TFLint to JSON (and SARIF)
         run: |
           mkdir -p input
-          tflint --format json > input/tflint.json || true
+          # Initialize if you use TFLint plugins/rulesets (optional but recommended)
+          tflint --init || true
+          # JSON for our action to ingest
+          tflint --recursive --format json > input/tflint.json || true
+          # Native SARIF (optional, our action can also convert)
+          tflint --recursive --format sarif > input/tflint.sarif || true
+
+      # (Optional) tfsec and checkov pre-run on the runner — if you want native SARIF/JSON before the action:
+      - name: Setup tfsec CLI
+        uses: aquasecurity/setup-tfsec@v1
+      - name: Run tfsec to JSON and SARIF
+        run: |
+          tfsec --format json --out input/tfsec.json || true
+          tfsec --format sarif --out input/tfsec.sarif || true
+
+      - name: Setup Python for Checkov
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install and run Checkov
+        run: |
+          pip install --no-cache-dir checkov==3.2.125
+          checkov -d . -o json --output-file-path input/checkov.json || true
+          checkov -d . -o sarif --output-file-path input/checkov.sarif || true
 
       - name: AIOps SCA Agent
         uses: aiops-agents/aiops-sca@main
