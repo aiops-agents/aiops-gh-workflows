@@ -1,8 +1,9 @@
 name: Terraform CI
-
 on:
   push:
-    branches: [ dev ] # update to 'main' while testing
+    branches:
+      - main
+      - dev
   pull_request:
 
 permissions:

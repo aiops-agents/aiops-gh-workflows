@@ -5,7 +5,7 @@ provider "aws" {
 
 # Define the S3 bucket resource
 resource "aws_s3_bucket" "my_example_bucket" {
-  bucket = "aiops-test-s3-bucket-12345"
+  bucket = "aiops-test-s3-bucket-hgf4f"
   acl    = "private"
 
   tags = {
