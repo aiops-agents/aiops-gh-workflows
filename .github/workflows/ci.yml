@@ -47,7 +47,7 @@ jobs:
           checkov -d . -o sarif --output-file-path input/checkov.sarif || true
 
       - name: AIOps SCA Agent
-        uses: aiops-agents/aiops-sca@main
+        uses: aiops-agents/aiops-sca@dev
         with:
           scope: '["infra/**/*.tf"]'
           tf_root_dir: infra
