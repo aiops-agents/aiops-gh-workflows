@@ -50,6 +50,8 @@ jobs:
       - name: AIOps SCA Agent
         uses: aiops-agents/aiops-sca@dev
         with:
+          llm_provider: azure_openai
+          llm_model: gpt-4o-mini
           scope: '["infra/**/*.tf"]'
           tf_root_dir: infra
           re_lint_after_apply: true
