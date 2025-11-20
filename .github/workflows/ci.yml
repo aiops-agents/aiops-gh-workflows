@@ -2,7 +2,7 @@ name: Terraform CI
 
 on:
   push:
-    branches: [ main ] # update to 'main' while testing
+    branches: [ dev ] # update to 'main' while testing
   pull_request:
 
 permissions:
@@ -47,36 +47,13 @@ jobs:
           checkov -d . -o sarif --output-file-path input/checkov.sarif || true
 
       - name: AIOps SCA Agent
-        uses: aiops-agents/aiops-sca@main
+        uses: aiops-agents/aiops-sca@dev
         with:
-          enable: true
           scope: '["infra/**/*.tf"]'
-          input_dir: "./input"
-          output_dir: "./output"
-          llm_provider: "azure_openai"
-          llm_model: "gpt-4o-mini"
-          show_recommendation: true
-          auto_apply: true
-          lint_format: "auto"
-          apply_mode: "pr"                # dry-run or pr, pr for open a PR with changes
-          pr_title: "AIOps SCA: Terraform fixes"
-          pr_body: "Automated changes by AIOps SCA. Please review."
-          max_lines_changed: "200"
-          max_files_changed: "10"
-          protected_paths: '["infra/modules/vendor/**"]'
-          recommendation_format: "markdown"
-          fail_on_unfixed: "false"
-          commit_message_prefix: "[aiops-sca]"
-          git_user_name: "aiops-sca[bot]"
-          git_user_email: "aiops-sca-bot@example.com"
-          lint_retry_on_failure: "true"
-          allow_severities: '["medium","high","critical","error"]'
-          exclude_rules: '["AWS001","terraform_required_providers"]'
-          max_token_context_bytes: "0"
-          audit_log: "true"
-          re_lint_after_apply: "true"
-          re_lint_cmd: 'tflint --recursive --format json > output/re_lint.json || true'
-          re_lint_output_glob: "output/re_lint.json"
+          tf_root_dir: infra
+          re_lint_after_apply: true
+          re_lint_tooling: built-in
+          re_lint_tools: '["tflint","tfsec","checkov"]'
         env:
           GITHUB_TOKEN: ${{ github.token }}
           AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
